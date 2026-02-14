@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>KHUS AI - Futuristic Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 20% 20%, #0a0f1e, #030514);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Futuristic animated background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+            animation: gridPulse 4s infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .floating-particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: cyan;
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh) translateX(-10vw); }
+            to { transform: translateY(-10vh) translateX(110vw); }
+        }
+
+        /* Main container */
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 400px;
+            height: 95vh;
+            background: rgba(10, 20, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2),
+                        inset 0 0 30px rgba(0, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 0 10px cyan);
+            animation: rotate 4s infinite linear;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, cyan, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .status {
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00ff00;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* AI Avatar */
+        .ai-avatar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, cyan, #ff00ff, cyan);
+            background-size: 200% 200%;
+            animation: gradientMove 3s infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .avatar-inner {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #0a0f1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .listening-wave {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: cyan;
+            border-bottom-color: #ff00ff;
+            animation: spin 2s infinite linear;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Wake word indicator */
+        .wake-word {
+            text-align: center;
+            padding: 5px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            letter-spacing: 2px;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 20px;
+            margin: 0 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .wake-word.active {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px cyan;
+            animation: glow 1s infinite;
+        }
+
+        /* Chat container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            animation: fadeIn 0.3s;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(45deg, #00ffff22, #ff00ff22);
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            color: #fff;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background: rgba(20, 30, 50, 0.8);
+            border: 1px solid rgba(255, 0, 255, 0.5);
+            color: #fff;
+        }
+
+        /* Input area */
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: cyan;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, cyan, #ff00ff);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn.mic {
+            background: linear-gradient(45deg, #ff00ff, cyan);
+        }
+
+        .action-btn.mic.listening {
+            animation: micPulse 1s infinite;
+        }
+
+        @keyframes micPulse {
+            0%, 100% { box-shadow: 0 0 20px #ff00ff; }
+            50% { box-shadow: 0 0 40px cyan; }
+        }
+
+        /* Learning memory indicator */
+        .memory-bar {
+            height: 3px;
+            background: linear-gradient(90deg, cyan, #ff00ff);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        /* Voice wave animation */
+        .voice-wave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            height: 30px;
+            padding: 0 10px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            height: 20px;
+            background: cyan;
+            border-radius: 2px;
+            animation: wave 0.5s infinite alternate;
+        }
+
+        @keyframes wave {
+            from { height: 10px; }
+            to { height: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="cyber-grid"></div>
+    <div id="particles"></div>
+
+    <div class="app-container">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">KHUS AI</span>
+            </div>
+            <div class="status" id="statusIndicator"></div>
+        </div>
+
+        <div class="ai-avatar">
+            <div class="avatar-circle">
+                <div class="avatar-inner">
+                    🤖
+                </div>
+            </div>
+            <div class="listening-wave" id="waveAnimation"></div>
+        </div>
+
+        <div class="wake-word" id="wakeWordIndicator">
+            🎤 Say "Hi Khus" to activate
+        </div>
+
+        <div class="memory-bar" id="memoryBar"></div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai-message">
+                Hello! I'm KHUS AI, your futuristic assistant. How can I help you today?
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-field" id="userInput" placeholder="Type or speak..." />
+            <button class="action-btn" id="sendBtn">➤</button>
+            <button class="action-btn mic" id="micBtn">🎤</button>
+        </div>
+
+        <div class="voice-wave" id="voiceWave" style="display: none;">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        class KhusAI {
+            constructor() {
+                this.isListening = false;
+                this.isWakeWordDetected = false;
+                this.wakeWord = "hi khus";
+                this.memory = this.loadMemory();
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+                this.initSpeechRecognition();
+                this.initEventListeners();
+                this.updateMemoryBar();
+                this.createParticles();
+            }
+
+            initSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = true;
+                    this.recognition.interimResults = true;
+                    this.recognition.lang = 'en-US';
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = Array.from(event.results)
+                            .map(result => result[0].transcript)
+                            .join('')
+                            .toLowerCase();
+
+                        if (!this.isWakeWordDetected && transcript.includes(this.wakeWord)) {
+                            this.activateWakeWord();
+                        }
+
+                        if (this.isWakeWordDetected && this.isListening) {
+                            const lastResult = event.results[event.results.length - 1];
+                            if (lastResult.isFinal) {
+                                this.processVoiceInput(lastResult[0].transcript);
+                            }
+                        }
+                    };
+                }
+            }
+
+            activateWakeWord() {
+                this.isWakeWordDetected = true;
+                document.getElementById('wakeWordIndicator').classList.add('active');
+                document.getElementById('wakeWordIndicator').textContent = '🎤 KHUS activated - listening...';
+                this.speak("Yes, I'm listening");
+                this.startListening();
+            }
+
+            startListening() {
+                this.isListening = true;
+                document.getElementById('micBtn').classList.add('listening');
+                document.getElementById('voiceWave').style.display = 'flex';
+                document.getElementById('waveAnimation').style.animation = 'spin 1s infinite linear';
+                
+                if (this.recognition) {
+                    try {
+                        this.recognition.start();
+                    } catch (e) {
+                        console.log('Recognition already started');
+                    }
+                }
+            }
+
+            stopListening() {
+                this.isListening = false;
+                this.isWakeWordDetected = false;
+                document.getElementById('micBtn').classList.remove('listening');
+                document.getElementById('wakeWordIndicator').classList.remove('active');
+                document.getElementById('wakeWordIndicator').textContent = '🎤 Say "Hi Khus" to activate';
+                document.getElementById('voiceWave').style.display = 'none';
+                document.getElementById('waveAnimation').style.animation = 'none';
+                
+                if (this.recognition) {
+                    this.recognition.stop();
+                }
+            }
+
+            processVoiceInput(text) {
+                this.addMessage(text, 'user');
+                this.generateAIResponse(text);
+                this.stopListening();
+            }
+
+            async generateAIResponse(userInput) {
+                // Simulate ChatGPT brain with smart learning
+                const response = await this.getAIResponse(userInput);
+                this.addMessage(response, 'ai');
+                this.speak(response);
+                this.learnFromInteraction(userInput, response);
+            }
+
+            getAIResponse(input) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Check memory first
+                        const remembered = this.checkMemory(input);
+                        if (remembered) {
+                            resolve(remembered);
+                            return;
+                        }
+
+                        // Simulate AI responses (in production, this would call actual ChatGPT API)
+                        const responses = [
+                            "That's fascinating! Tell me more about that.",
+                            "I understand. Based on our previous conversations, I think you might be interested in...",
+                            "Let me think about that. I've learned something similar before.",
+                            "Interesting question! Here's what I know...",
+                            "I'm constantly learning from our conversations to serve you better."
+                        ];
+                        resolve(responses[Math.floor(Math.random() * responses.length)]);
+                    }, 1000);
+                });
+            }
+
+            checkMemory(input) {
+                // Smart learning memory
+                const keywords = input.toLowerCase().split(' ');
+                for (let keyword of keywords) {
+                    if (this.memory[keyword]) {
+                        return `I remember you asked about ${keyword} before. ${this.memory[keyword]}`;
+                    }
+                }
+                return null;
+            }
+
+            learnFromInteraction(input, response) {
+                // Extract key information and store in memory
+                const words = input.toLowerCase().split(' ');
+                const keyWords = words.filter(word => word.length > 4);
+                
+                keyWords.forEach(word => {
+                    if (!this.memory[word]) {
+                        this.memory[word] = response;
+                    }
+                });
+
+                this.saveMemory();
+                this.updateMemoryBar();
+            }
+
+            addMessage(text, sender) {
+                const chatContainer = document.getElementById('chatContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                messageDiv.textContent = text;
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            speak(text) {
+                if (this.synthesis) {
+                    this.synthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 1;
+                    utterance.pitch = 1.2;
+                    utterance.voice = this.synthesis.getVoices().find(voice => voice.lang === 'en-US');
+                    this.synthesis.speak(utterance);
+                }
+            }
+
+            loadMemory() {
+                const saved = localStorage.getItem('khusMemory');
+                return saved ? JSON.parse(saved) : {};
+            }
+
+            saveMemory() {
+                localStorage.setItem('khusMemory', JSON.stringify(this.memory));
+            }
+
+            updateMemoryBar() {
+                const memorySize = Object.keys(this.memory).length;
+                const maxMemory = 100;
+                const percentage = Math.min((memorySize / maxMemory) * 100, 100);
+                document.getElementById('memoryBar').style.width = `${percentage}%`;
+            }
+
+            initEventListeners() {
+                document.getElementById('sendBtn').addEventListener('click', () => {
+                    const input = document.getElementById('userInput');
+                    if (input.value.trim()) {
+                        this.addMessage(input.value, 'user');
+                        this.generateAIResponse(input.value);
+                        input.value = '';
+                    }
+                });
+
+                document.getElementById('micBtn').addEventListener('click', () => {
+                    if (this.isListening) {
+                        this.stopListening();
+                    } else {
+                        this.startListening();
+                    }
+                });
+
+                document.getElementById('userInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        document.getElementById('sendBtn').click();
+                    }
+                });
+
+                // Wake word detection from keyboard as fallback
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'k' && e.ctrlKey) {
+                        this.activateWakeWord();
+                    }
+                });
+            }
+
+            createParticles() {
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'floating-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 10 + 's';
+                    particle.style.animationDuration = 10 + Math.random() * 10 + 's';
+                    document.body.appendChild(particle);
+                }
+            }
+        }
+
+        // Initialize the AI
+        const khusAI = new KhusAI();
+
+        // Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(console.error);
+        }
+    </script>
+</body>
+</html>
